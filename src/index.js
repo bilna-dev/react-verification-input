@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react';
-import classNames from 'classnames';
 import PropTypes from 'proptypes';
 
 import { KEY_CODE } from './constants';
@@ -238,14 +237,12 @@ export default class VerificationInput extends PureComponent {
 
     return (
       <div
-        className={classNames('verification-input__container', containerClassName)}
+        className={`verification-input__container ${containerClassName || ''}`}
         {...containerProps}
       >
         <input
           ref={(input) => this.input = input}
-          className={classNames('verification-input', inputClassName, {
-            'verification-input--debug': debug,
-          })}
+          className={`verification-input ${inputClassName || ''} ${debug ? 'verification-input--debug' : ''}`}
           onKeyUp={this.handleKeyUp.bind(this)}
           onFocus={() => {
             this.setState({ isActive: true });
@@ -263,19 +260,21 @@ export default class VerificationInput extends PureComponent {
           {...inputProps}
         />
         <div
-          className={classNames('verification-input__characters', charactersClassName)}
+          className={`verification-input__characters ${charactersClassName || ''}`}
           onClick={() => this.input.focus()}
           {...charactersProps}
         >
           {[...Array(length)].map((_, i) => (
             <div
-              className={classNames('verification-input__character', characterClassName, {
-                'verification-input__character--default': !removeDefaultStyles,
-                'verification-input__character--selected': !removeDefaultStyles && this.state.selectedIndex === i && this.state.isActive,
-                [characterClassNameSelected]: this.state.selectedIndex === i && this.state.isActive,
-                'verification-input__character--inactive': !removeDefaultStyles && this.state.tan.length < i,
-                [characterClassNameInactive]: this.state.tan.length < i,
-              })}
+              className={`
+                verification-input__character
+                ${characterClassName || ''}
+                ${!removeDefaultStyles ? 'verification-input__character--default' : ''}
+                ${ !removeDefaultStyles && this.state.selectedIndex === i && this.state.isActive ? 'verification-input__character--selected' : ''}
+                ${this.state.selectedIndex === i && this.state.isActive && characterClassNameSelected ? characterClassNameSelected : ''}
+                ${!removeDefaultStyles && this.state.tan.length < i ? 'verification-input__character--inactive' : ''}
+                ${this.state.tan.length < i && characterClassNameInactive ? characterClassNameInactive : ''}
+              `}
               onClick={this.handleClick.bind(this)}
               id={`field-${i}`}
               key={i}
